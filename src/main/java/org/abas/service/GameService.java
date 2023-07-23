@@ -41,7 +41,7 @@ public class GameService {
      */
     public void startGame() {
         if (propertyService.computerIsReady(Constants.APP_PROPERTIES)) {
-            while (checkMove(scanner) != null) {
+            while (getUserMove(scanner) != null) {
                 Move computerMove = getComputerMove();
                 System.out.println(username + ": " + userMove.name() + " Computer: " + computerMove.name());
                 calculate(userMove, computerMove);
@@ -59,15 +59,26 @@ public class GameService {
     private void calculate(Move userMove, Move computerMove) {
         if (userMove.equals(computerMove)) {
             System.out.println("Its a tie!");
-        } else if ((userMove.equals(Move.ROCK) && computerMove.equals(Move.SCISSOR))
-                || (userMove.equals(Move.PAPER) && computerMove.equals(Move.ROCK))
-                || (userMove.equals(Move.SCISSOR) && computerMove.equals(Move.PAPER))) {
+        } else if (didUserWin(userMove, computerMove)) {
             System.out.println(username + " won!");
             userScore++;
         } else {
             System.out.println(Constants.COMPUTER_WON);
             computerScore++;
         }
+    }
+
+    /**
+     * Checks if the user wins a round based on their move and the computer's move.
+     *
+     * @param userMove The move chosen by the user (Rock, Paper, or Scissors).
+     * @param computerMove The move chosen by the computer (Rock, Paper, or Scissors).
+     * @return true if the user wins the round, false otherwise.
+     */
+    private boolean didUserWin(Move userMove, Move computerMove) {
+        return (userMove.equals(Move.ROCK) && computerMove.equals(Move.SCISSOR))
+                || (userMove.equals(Move.PAPER) && computerMove.equals(Move.ROCK))
+                || (userMove.equals(Move.SCISSOR) && computerMove.equals(Move.PAPER));
     }
 
     /**
@@ -89,7 +100,7 @@ public class GameService {
      * @param scanner The Scanner object used to read user input.
      * @return The user's selected move (Rock, Paper, or Scissors) or null if the user decides to quit.
      */
-    private Move checkMove(Scanner scanner) {
+    private Move getUserMove(Scanner scanner) {
         do {
             System.out.println(username + ": ");
             String userInput = scanner.nextLine();
